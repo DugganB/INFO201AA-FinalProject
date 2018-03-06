@@ -23,15 +23,21 @@ server <- function(input, output) {
         btc.max.eth <- data.filter %>%
             filter(symbol == "ETH") %>%
             filter(date == max.closing.btc$date)
+        btc.max.eth.week <- data.filter %>%
+            filter(symbol == "ETH") %>%
+            filter(date == as.Date(max.closing.btc$date) - 7)
+        #eth.percent.diff <- 
         
         return(paste0("Without even looking at any raw data, anyone that sees ",
                      "this line plot will see the strong influence that BTC ",
                      "has on the prices of all other coins. Observing the ",
                      "dataset more closely, we can see one key date that had ",
-                     "the biggest influence on other tokens: ", max.closing$date,
+                     "the biggest influence on other tokens: ", max.closing.btc$date,
                      ". This date is where BTC saw it's maximum closing price ",
                      "in our dataset. We can also observe other coin prices on ",
-                     "the same date. "))
+                     "the same date. Ethereum saw a closing price of ",
+                     btc.max.eth$close, ", an increase of almost %%% a week prior. ",
+                     " there"))
     })
 }
 
