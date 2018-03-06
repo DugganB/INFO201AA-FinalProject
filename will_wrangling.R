@@ -19,7 +19,7 @@ data.raw <- read.csv("crypto-markets.csv", stringsAsFactors = FALSE)
 
 data.100 <- filter(as.data.frame(data.raw, stringsAsFactors = FALSE), ranknow <= 100)
 
-View(data.100)
+# View(data.100)
 
 data.coins <- filter(data.100, date == "2018-02-05") %>%
   select(slug)
@@ -61,12 +61,12 @@ data.2016.sum <- SumYear(2016)
 data.2017.sum <- SumYear(2017)
 data.2018.sum <- SumYear(2018)
 
-View(data.2013.sum)
-View(data.2014.sum)
-view(data.2015.sum)
-View(data.2016.sum)
-View(data.2017.sum)
-View(data.2018.sum)
+# View(data.2013.sum)
+# View(data.2014.sum)
+# view(data.2015.sum)
+# View(data.2016.sum)
+# View(data.2017.sum)
+# View(data.2018.sum)
 
 # Potentially do a dataset that compares 2.
 # Bitcoin price (or spread) at time compared to coin
@@ -91,8 +91,8 @@ CoinData <- function(coinslugone, coinslugtwo, startdate, enddate){
 
 
 test <- CoinData("bitcoin", "ethereum", "2017-01-01", "2018-02-05")
-View(test)
-?geom_line
+# View(test)
+# ?geom_line
 
 # Group by slugs
 ggplot(data = test) +
@@ -102,14 +102,71 @@ ggplot(data = test) +
   geom_line(aes (x = date, y = high, group = slug, color = slug))
   
 
+# too many lines, too expensive
+# ggplot(data = data.100) +
+#   geom_line(aes(x = date, y = spread, group = slug, color = slug))
 
 
-# ScalePricetoSpread <-
 
 bitcoinscalar <- max(data.100$high)
 
-data.testscalar <- filter(data.100, slug == "bitcoin") %>%
-  mutate(high = high / bitcoinscalar)
+testcoin <- "ethereum"
+testcoinfilter <- filter(data.100, slug == testcoin)
+testcoinscalar <- as.double(max(testcoinfilter$spread))
+# testcoinscalar <- as.(unlist(testcoinscalar.wtf)
+typeof(testcoinscalar)
+View(testcoinscalar)
+
+
+data.testscalar <- filter(data.100, slug == "bitcoin" | slug == testcoin) %>%
+  mutate(scaled.price = high / bitcoinscalar, scaled.spread = spread / max(spread))
+
+
+
+# Create a variable that uses scaled high for bitcoin and scaled spread for other coin
+# Put it into 1 column so we can use that as a reference point
+
+# View(data.testscalar)
+# Comparison of spread of bitcoin and testcoin (ethereum) to max spread
+ggplot(data = data.testscalar) +
+  geom_line (aes(x = date, y= scaled.spread, group = slug, color = slug))
+
+# comparison of spread of bitcoin and testcoin (ethereum) to a scaled max price (max price of bitcoin)
+ggplot(data = data.testscalar) +
+  geom_line (aes(x = scaled.price, y = scaled.spread, group = slug, color = slug))
+
+
+# limit by max spread of smaller coin?
+# dividing by smaller coin in spread or price is still same result, just on differing scale. Would have to filter for results
+# within a certain amount.
+
+data.testmaxspread <- filter(data.100, slug == "bitcoin" | slug == testcoin, spread <= testcoinscalar) %>%
+  mutate(scaled.price = high / bitcoinscalar, scaled.spread = spread / testcoinscalar)
+
+ggplot(data = data.testmaxspread) +
+  geom_line (aes(x = scaled.price, y= scaled.spread, group = slug, color = slug))
+
+
+# limit by max price of smaller coin?
+
+
+
+
+
+
+
+
+
+
+
+# ggplot(data = data.testscalar) +
+#   geom_line (aes(y = scaled.price, x = scaled.spread, group = slug, color = slug))
+
+
+# 
+# spreadscalar <- filter(data.100, slug == testcoin) %>%
+#   mutate(scaled.)
+
 # Need to figure out how to separate and iterate through all the coins 
 
 # Try finding overall variance of spread between coins?
