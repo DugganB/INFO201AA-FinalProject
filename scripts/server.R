@@ -14,11 +14,7 @@ server <- function(input, output) {
             geom_line(aes(date, close, group=symbol, color=symbol)) +
             # clean up style
             ggtitle("Closing prices") +
-            labs(x = "Date", y = "Closing Price") +
-            theme(axis.text.x = element_blank(),
-                  axis.ticks.x = element_blank(),
-                  axis.text.y = element_blank(),
-                  axis.ticks.y = element_blank())
+            labs(x = "Date", y = "Closing Price")
     })
     
     output$plot.info <- renderText({
