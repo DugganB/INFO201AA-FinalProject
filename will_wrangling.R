@@ -111,11 +111,10 @@ ggplot(data = test) +
 bitcoinscalar <- max(data.100$high)
 
 testcoin <- "ethereum"
-testcoinfilter <- filter(data.100, slug == testcoin)
-testcoinscalar <- as.double(max(testcoinfilter$spread))
+
 # testcoinscalar <- as.(unlist(testcoinscalar.wtf)
-typeof(testcoinscalar)
-View(testcoinscalar)
+# typeof(testcoinscalar)
+# View(testcoinscalar)
 
 
 data.testscalar <- filter(data.100, slug == "bitcoin" | slug == testcoin) %>%
@@ -137,6 +136,10 @@ ggplot(data = data.testscalar) +
 
 
 # limit by max spread of smaller coin?
+
+testcoinfilter <- filter(data.100, slug == testcoin)
+testcoinscalar <- as.double(max(testcoinfilter$spread))
+testcoinprice <- as.double(max(testcoinfilter$high))
 # dividing by smaller coin in spread or price is still same result, just on differing scale. Would have to filter for results
 # within a certain amount.
 
@@ -149,7 +152,8 @@ ggplot(data = data.testmaxspread) +
 
 # limit by max price of smaller coin?
 
-
+data.testmaxspread <- filter(data.100, slug == "bitcoin" | slug == testcoin, high <= testcoinprice) %>%
+  mutate(scaled.price = high / testcoinprice, scaled.spread = spread / testcoinscalar)
 
 
 
