@@ -11,13 +11,8 @@ ui <- fluidPage(
                       format = "yyyy-mm-dd", value = "2017-01-01")
         ),
         mainPanel(
-            # divide into different tabs
-            tabsetPanel(
-                type = "tabs",
-                # output data...
-                tabPanel("Plot", plotOutput("plot"), textOutput("plot.info")),
-                tabPanel("Table", dataTableOutput("table"))
-            )
+            plotlyOutput("plot.trends"),
+            textOutput("plot.info.trends")
         )
     )
 )
