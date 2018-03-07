@@ -1,8 +1,8 @@
 # load packages
 library("dplyr")
 library("ggplot2")
+library("plotly")
 library("shiny")
-library("shinythemes")
 library("tidyr")
 
 # source scripts
