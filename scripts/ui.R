@@ -1,6 +1,6 @@
 ui <- navbarPage(theme = shinytheme("cosmo"),
   
-                 title = "Analyzing Cryptocurrency Trends and Events"
+                 title = "Analyzing Cryptocurrency Trends and Events",
                  
                  # tabPanel(h5("Old"),
                  #          sidebarPanel(
@@ -24,4 +24,32 @@ ui <- navbarPage(theme = shinytheme("cosmo"),
                  #                tabPanel("Table", dataTableOutput("table"))
                  #      )
                  #  )
+                 
+                 tabPanel(h5("Market Cap"),
+                          
+                          sidebarPanel(
+                            # dateInput('start_date', label = "Select start date:",
+                            #           value = "2013-04-28",
+                            #           min = "2013-04-28",
+                            #           max = "2018-02-05",
+                            #           format = "yyyy-mm-dd"
+                            #           
+                            # ),
+                            
+                            dateRangeInput('market.range', label = "Select date range:",
+                                           start = "2018-01-05",
+                                           end = "2018-02-05",
+                                           min = "2013-04-28",
+                                           max = "2018-02-05",
+                                           format = "yyyy-mm-dd")
+                            
+                          ),
+                          
+                          mainPanel(
+                            plotOutput('price.plot'),
+                            plotOutput('market.plot')
+                          )
+                          
+                 )
+                 
 )

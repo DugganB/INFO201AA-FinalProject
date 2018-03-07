@@ -33,16 +33,27 @@ server <- function(input, output) {
                      "in our dataset. We can also observe other coin prices on ",
                      "the same date. "))
     })
+    
+    #### Market Cap ####
+    
+    market.data <- reactive ({
+      data.filter %>% filter(date >= input$market.range[1] &
+                             date <= input$market.range[2])
+    })
+    
+    
+    output$price.plot <- renderPlot({
+      ggplot(market.data(), aes(x = date, y = close, group = name, color = name)) +
+        geom_line() +
+        theme(legend.position = "none")
+        
+    })
+    
+    output$market.plot <- renderPlot({
+      ggplot(market.data(), aes(x = date, y = market, group = name, color = name)) +
+        geom_line() +
+        theme(legend.position = "none")
+      
+    })
+    
 }
-
-
-
-
-
-
-
-
-
-
-
-
