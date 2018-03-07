@@ -152,6 +152,26 @@ server <- function(input, output) {
              increases and decreases.","Since most of the more massive changes in spread were all",
              " around the same time, there is very little change until mid-late 2017 if you change the calendar.")
     })
+    output$data.explanation <- renderText({
+      paste0("Our dataset explores cryptocurrency. More specifically, it gives some basic ",
+        "information regarding tokens for every day and from April 28th 2017 to February 6th 2018 ",
+        "(with new updates every few weeks). The data was gained through scraping CoinMarketCap, ",
+        "a site that tracks various coins, and converting the information into a dataframe. ",
+        "This dataset was built with R and heavily enhanced to be compatible with CRAN. ",
+        "It's currently still a github project that's in the works of being published by CRAN. ",
+        "This was mainly created by Jesse Vent, a data analyst in Australia.
+    There are observations of 1,382 different crypto tokens (i.e. bitcoin, ethereum, etc). ",
+        "It has 13 column variables: slug, symbol, name, date, ranknow (ranking), open ",
+        "(the day's starting value), high, low, close (the day's closing value), volume(in circulation)",
+        ", market, close_ratio, and spread (high-low difference). In total, there are 649,051 observations. ",
+        "This gives a very thorough dataset on the basic concepts involving cryptocurrencies. ",
+        "From this perspective, it's not necessary to understand the technical capability of a ",
+        "coin, but merely the monetary value of it.
+        
+    We will be analyzing trends involving cryptocurrency, and trying to relate them to each other, and real world events.",
+        " These trends will help us recognize and understand the nature of cryptocurrency."
+        )
+    })
    
 }
 

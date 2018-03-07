@@ -3,6 +3,12 @@ source("will_wrangling.R")
 ui <- navbarPage(theme = shinytheme("cosmo"),
 
     title = "Analyzing Cryptocurrency Trends and Events",
+    tabPanel(h5("About Dataset"),
+             textOutput("data.explanation") 
+             
+             ),
+    
+    
     tabPanel(h5("Trends"),
     	sidebarLayout(
     		sidebarPanel(
