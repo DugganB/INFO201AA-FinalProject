@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-Group Members:
-Duggan Burke (dugganb)
-Derrick Chung (flykobo)
-Kyler Sakumoto (kylerws)
-=======
 # Analyzing Cryptocurrency Trends and Events
 
 ## Application: https://github.com/DugganB/INFO201AA-FinalProject
@@ -18,4 +12,3 @@ There are observations of 1,382 different crypto tokens (i.e. bitcoin, ethereum,
 2. When Bitcoin (BTC) sees a downtrend do other coins also see similar patterns? What about uptrends?
 3. What uptrends and downtrends are linked to real world developments? (Forks, regulations, etc).  Are there artificial trends in the market (whales)? What percentage of these trends are artificial?
 4. During ‘big’ crashes or corrections how long does it take for a price recovery to take place? Is there any pattern that can be seen from the decrease in price compared to how long it stays below the all time high?
->>>>>>> 7a4d6901aa275dc23de7d463b8dad5aa83b82bed
