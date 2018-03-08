@@ -172,7 +172,35 @@ server <- function(input, output) {
         " These trends will help us recognize and understand the nature of cryptocurrency."
         )
     })
-   
+    
+    crashname <- reactive({
+      input$Crash
+    })
+    
+    crashCoin <- reactive({
+      input$coin
+    })
+    
+    output$crashPlot <- renderPlot({
+      plottitle <-paste0("The Crash of ",as.character(crashname())," showing ", as.character(crashCoin()))
+      data.crash <- coinTimeFrame(crashstartdate(crashname()),crashenddate(crashname()),crashCoin())
+      ggplot(data = data.crash)+
+        geom_line(aes(x = date, y = open, group = slug, color = slug)) +
+        ggtitle(plottitle)
+    })
+    
+    output$crashtable.info <- renderText({
+      paste0("This is a table summarizing the statistics for this crash. If numbers show up as NaN or 0 that is because the dataset", 
+             " is not perfect")
+    })
+    
+    output$crashTable <- renderTable({
+      crashTable <- coinDropSummary(crashstartdate(crashname()),crashenddate(crashname()))
+    })
+    
+    output$crashplot.info <- renderText({
+      getCrashInfo(crashname(), crashCoin())
+    })
 }
 
 
