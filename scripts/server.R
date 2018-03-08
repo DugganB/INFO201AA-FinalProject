@@ -6,113 +6,41 @@ server <- function(input, output) {
     market.end.date <- reactive ({
       as.Date(input$market.date) + input$market.range
     })
-  
-    # Select Market Cap data based on date
+
+    # Filter initial market data based on date
     market.data <- reactive ({
       market.data.filter %>% filter(date >= input$market.date &
-                                    date <= market.end.date())
+                                    date <= market.end.date()) %>%
+        group_by(name) %>% filter(first(date) <= input$market.date + 15) %>% ungroup()
     })
     
-    # Cut by price
-    # m.data.price <- reactive ({
-    #   market.data() %>% price
-    # })
-    
-    # Cut by marke cap
-
-    
-    # # Breaks for date axis
-    # date.breaks <- reactive({
-    #   seq(from = input$market.date,
-    #       to = market.end.date(),
-    #       length.out = 10)
-    # })
-    
-    # Filters dm_dt data
-    dm_dt.data <- reactive ({
-      data <- market.data() %>% mutate(date_interval = cut(as.Date(date), "week")) %>%
-              group_by(date_interval, name)
-      
-      data <- data %>% mutate(first = first(market), last = last(market))
-      data <- data %>% summarise(dt = length(date_interval)) %>%
-              right_join(data, by = c("date_interval", "name")) %>% mutate(dm = (last - first) / dt)
+    # Filter data for market growth
+    market.growth <- reactive ({
+      data <- market.data() %>% group_by(name) %>%
+        filter(date == first(date) | date == last(date)) %>%
+        mutate(net_market = last(market) - first(market),
+               avg_market = (last(market) + first(market) / 2),
+               market_price = (last(market) + first(market) / 2)) %>%
+        mutate(net_market_pct = net_market / first(market))
+      data <- data %>% select(name, avg_market, net_market_pct, market_price) %>%
+                unique()
+        
       return(data)
     })
-    
-    dm_dt.ranking <- reactive ({
-      # Select unique dm_dt values for all coins at each date interval
-      data <- dm_dt.data() %>% select(date_interval, name, dm, dt) %>% unique() %>% ungroup()
-      data <- data %>% split(as.factor(data$name))  # split data by coin
-      data.list <- lapply(data, parse.dm_dt)        # parse to list of data frames
-      
-      # Join and return
-      return(Reduce(function(x, y) full_join(x, y, by = "date_interval"), data.list))
-    })
-    
-    # Parses a tibble of coin dm_dt data and returns a data frame
-    # organized by date interval
-    #
-    # data is a tibble with columns date.interval, name, dm, dt
-    parse.dm_dt <- function(data) {
-      coin <- data$name %>% first()                   # save coin name
-      data <- data[ , names(data) != "name"] %>%      # convert to data frame
-              as.data.frame()
-      colnames(data) <- c("date_interval",
-                          paste0(coin, "_dm"),
-                          paste0(coin, "_dt"))
-      return(data)
-    }
-    
-    # Plot closing price
-    output$price.plot <- renderPlot({
-      ggplot(market.data(), aes(x = as.Date(date), y = close, group = name, color = name)) +
-        geom_line() +
-        #scale_x_date(date_breaks = "1 week") +
-        theme(legend.position = "none")
 
-    })
-    
-    # Plot dm_dt
-    output$dm_dt.plot <- renderPlot({
-      ggplot(dm_dt.data(), aes(x = date_interval, y = dm, group = name, color = name)) +
-        geom_line() +
-        # scale_y_log10() +
-        labs(title = "Change in Market Cap by Week",
-             x = "Week (by start date)",
-             y = "Change in Market Cap (USD)") +
-        scale_y_continuous(labels = scales::dollar) +
-        theme(legend.position = "none")
-      
-    })
-    
-    
-    # output$market.rank.plot <- renderPlot ({
-    #   ggplot(dm_dt.ranking(), aes(x = ))
-    # })
-    
-    # Plot market cap
-    output$market.plot <- renderPlot({
-      ggplot(market.data(), aes(x = date, y = market, group = name, color = name)) +
-        geom_line() +
-        # scale_y_log10() +
-        theme(legend.position = "none")
-    })
-    
-    output$market.info <- renderText({
-      return(paste0("The Market Cap, or market capitalization of a coin is regarded by, ",
-                    "investors as one of the best means of estimating a coin's return on ",
-                    "investment (ROI). It is widely touted as ...",
-
-                    "Given the market prices and market caps for the top 100 ranked coins, ",
-                    "how well does market cap actually predict ROI?",
-
-                    "In general, market cap for a coin is calculated by ",
-                    
-                    "Market Cap = Supply x Price",
-
-                    "Our dataset draws its observtions from CoinMarketCap, which uses ",
-                    "the total circulating supply (number of coins currently circulating ",
-                    "in the market or in public hands) to calculate the cap."))
+    # Plot growth data
+    output$growth.plot <- renderPlot({
+      ggplot(market.growth(), aes(x = avg_market, y = net_market_pct)) +
+        geom_point(aes(color = market_price), size = 4) +
+        labs(x = "Average Market Cap (USD)", y = "Percent Growth over Interval") +
+        scale_x_continuous(labels = scales::dollar, trans = "sqrt") +
+        scale_y_continuous(labels = scales::percent) +
+        scale_color_gradient(low="orange", high="yellow",
+                             labels = scales::dollar) +
+        # Set font sizes
+        theme(axis.title.x = element_text(size = 12, face = "bold"),
+              axis.title.y = element_text(size = 12, face = "bold"),
+              legend.text = element_text(size = 10))
     })
     
 }
