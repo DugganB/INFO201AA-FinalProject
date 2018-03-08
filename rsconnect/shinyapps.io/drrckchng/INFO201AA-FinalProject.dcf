@@ -1,0 +1,13 @@
+name: INFO201AA-FinalProject
+title: INFO201AA-FinalProject
+username:
+account: drrckchng
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 295911
+bundleId: 1259657
+url: https://drrckchng.shinyapps.io/INFO201AA-FinalProject/
+when: 1520531308.79347
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: crypto-markets.csv|duggan_wrangling.R|README.md|will_wrangling.R
