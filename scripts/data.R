@@ -2,29 +2,22 @@
 data <- read.csv("crypto-markets100.csv", stringsAsFactors = FALSE)
 data.filter.trends <- select(data, symbol, name, date, open, close)
 
-
-# Grabbing the data from csv and then grabbing the top 100 data.
-data.raw <- read.csv("crypto-markets.csv", stringsAsFactors = FALSE)
-
-data.100 <- filter(as.data.frame(data.raw, stringsAsFactors = FALSE), ranknow <= 100)
-
-
 # grabbing list of all the coins for input
-list.coins <- filter(data.100, date == "2018-02-05") %>%
+list.coins <- filter(data, date == "2018-02-05") %>%
     select(slug)%>%
     as.list()
 
 list.crash <- c("November 2013", "Mt. Gox", "2017 Chinese FUD", "End of 2017")
 
 coinTimeFrame <- function(startDate, endDate, coinSlug){
-    data.timeFrame <- filter(data.100, date > startDate & date < endDate, slug == coinSlug)
+    data.timeFrame <- filter(data, date > startDate & date < endDate, slug == coinSlug)
     return(data.timeFrame)
 }
 
 
 # Generates the summary table for the crash given a start and end date
 coinDropSummary <- function(startDate, endDate){
-    data.timeFrame <- filter(data.100, date > startDate & date < endDate)
+    data.timeFrame <- filter(data, date > startDate & date < endDate)
     data.timeFrame.sum <- group_by(data.timeFrame, slug) %>%
         summarise(high = max(high),
                   low = min(low),
