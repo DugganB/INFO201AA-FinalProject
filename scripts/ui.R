@@ -72,11 +72,39 @@ ui <- navbarPage(theme = shinytheme("cosmo"),
              )
              
              
-    )
+    ),
 
-           
-           
-            
+    # Crash panel
+    tabPanel(h5("Crash Analysis"),
+             sidebarPanel(
+               # 2 input variables. Crash and coin to look at
+               selectInput("Crash", label = "Select a crash to look at",
+                           choices = list.crash
+                           
+                           
+               ),
+               selectInput("coin", label = "Select coin to compare",
+                           choices = list.coins
+                           
+                           
+               )
+               
+             ),
+             mainPanel(
+               tabsetPanel(
+                 # 3 tabs for basic spread plot, spread summary table, and scaled spread plot
+                 type = "tabs",
+                 
+                 tabPanel("Crash Plot", plotOutput("crashPlot"),textOutput("crashplot.info")),
+                 
+                 tabPanel("Crash Summary Table",
+                          textOutput("crashtable.info"),
+                          tableOutput("crashTable")
+                 
+               )
+             )
+        )
            
      
+)
 )
