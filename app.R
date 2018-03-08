@@ -13,4 +13,3 @@ source("scripts/server.R")
 
 # call shiny function to render
 shinyApp(ui, server)
-
