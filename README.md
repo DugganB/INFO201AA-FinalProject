@@ -1,6 +1,6 @@
 # Analyzing Cryptocurrency Trends and Events
 
-## Application: https://github.com/DugganB/INFO201AA-FinalProject
+## Application: https://kylerws.shinyapps.io/info201aa-finalproject/
 
 ## Dataset
 Our [dataset](https://www.kaggle.com/jessevent/all-crypto-currencies) explores cryptocurrency. More specifically, it gives some basic information regarding tokens for every day and from April 28th 2017 to February 6th 2018 (with new updates every few weeks). The data was gained through scraping [CoinMarketCap](https://coinmarketcap.com/), a site that tracks various coins, and converting the information into a dataframe. This dataset was built with R and heavily enhanced to be compatible with CRAN. It's currently still a github project that's in the works of being published by CRAN. This was mainly created by [Jesse Vent](https://www.kaggle.com/jessevent), a data analyst in Australia.
